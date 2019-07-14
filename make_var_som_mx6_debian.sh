@@ -40,7 +40,7 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 
 ## LINUX kernel: git, config, paths and etc
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
-readonly G_LINUX_KERNEL_GIT="https://github.com/varigit/linux-imx.git"
+readonly G_LINUX_KERNEL_GIT="https://github.com/netico-solutions/linux-imx.git"
 readonly G_LINUX_KERNEL_BRANCH="imx_4.9.11_1.0.0_ga-var01"
 readonly G_LINUX_KERNEL_REV="930b72fd05ac3f6c199ddd8cb9d24ac2a8296883"
 readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_defconfig'
