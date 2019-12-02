@@ -40,15 +40,12 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 
 ## LINUX kernel: git, config, paths and etc
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
-readonly G_LINUX_KERNEL_GIT="https://github.com/netico-solutions/linux-imx.git"
-readonly G_LINUX_KERNEL_BRANCH="imx_4.9.11_1.0.0_ga-var01"
-readonly G_LINUX_KERNEL_REV="930b72fd05ac3f6c199ddd8cb9d24ac2a8296883"
-readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_defconfig'
-readonly G_LINUX_DTB='imx6dl-var-som-cap.dtb imx6dl-var-som-res.dtb imx6dl-var-som-solo-cap.dtb imx6dl-var-som-solo-res.dtb imx6dl-var-som-solo-vsc.dtb imx6dl-var-som-vsc.dtb imx6q-var-dart.dtb imx6q-var-som-cap.dtb imx6q-var-som-res.dtb imx6q-var-som-vsc.dtb imx6qp-var-som-cap.dtb imx6qp-var-som-res.dtb imx6qp-var-som-vsc.dtb'
+readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_nanoedge_defconfig'
+readonly G_LINUX_DTB='imx6q-var-som-res.dtb'
 
 ## uboot
 readonly G_UBOOT_SRC_DIR="${DEF_SRC_DIR}/uboot"
-readonly G_UBOOT_GIT="https://github.com/varigit/uboot-imx.git"
+readonly G_UBOOT_GIT="https://github.com/netico-solutions/uboot-imx.git"
 readonly G_UBOOT_BRANCH="imx_v2017.03_4.9.11_1.0.0_ga_var01"
 readonly G_UBOOT_REV="466898df5360675516bf1f014e5d48e507ae5c95"
 readonly G_UBOOT_DEF_CONFIG_MMC='mx6var_som_sd_config'
@@ -77,7 +74,7 @@ readonly G_WILINK8_FW_BT_GIT_SRCREV="31a43dc1248a6c19bb886006f8c167e2fd21cb78"
 # much more standard replacement for Freescale's imx-gst1.0-plugin
 # Freescale mirror
 readonly G_FSL_MIRROR="http://www.freescale.com/lgfiles/NMG/MAD/YOCTO"
-# apt-get install gstreamer1.0-x gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa
+#apt-get install gstreamer1.0-x gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa
 # sh firmware-imx-6.0.bin --auto-accept
 readonly G_IMX_FW_PKG="firmware-imx-6.0"
 readonly G_IMX_FW_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_FW_PKG}"
@@ -331,10 +328,13 @@ echo "
 # /dev/mmcblk0p1  /boot           vfat    defaults        0       0
 " > etc/fstab
 
-echo "var-som-mx6" > etc/hostname
+echo "nano-edge" > etc/hostname
 
 echo "auto lo
 iface lo inet loopback
+
+auto eth1
+iface eth1 inet dhcp
 " > etc/network/interfaces
 
 echo "
@@ -401,9 +401,9 @@ protected_install dosfstools
 sed -i -e 's/#PermitRootLogin.*/PermitRootLogin\tyes/g' /etc/ssh/sshd_config
 
 # enable graphical desktop
-protected_install xorg
-protected_install xfce4
-protected_install xfce4-goodies
+# protected_install xorg
+# protected_install xfce4
+# protected_install xfce4-goodies
 
 # sound mixer & volume
 # xfce-mixer is not part of Stretch since the stable versionit depends on
@@ -414,12 +414,12 @@ protected_install xfce4-goodies
 #protected_install xfce4-volumed
 
 # network manager
-protected_install network-manager-gnome
+# protected_install network-manager-gnome
 protected_install net-tools
 
 ## fix lightdm config (added autologin x_user) ##
-sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
-sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
+# sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
+# sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
 
 # added alsa & alsa utilites
 protected_install alsa-utils
@@ -435,22 +435,22 @@ protected_install usbutils
 protected_install iperf
 
 #media
-protected_install audacious
+#protected_install audacious
 # protected_install parole
 
 # mtd
 protected_install mtd-utils
 
 # bluetooth
-protected_install bluetooth
-protected_install bluez-obexd
-protected_install bluez-tools
-protected_install blueman
-protected_install gconf2
+# protected_install bluetooth
+# protected_install bluez-obexd
+# protected_install bluez-tools
+# protected_install blueman
+# protected_install gconf2
 
 # wifi support packages
-protected_install hostapd
-protected_install udhcpd
+# protected_install hostapd
+# protected_install udhcpd
 
 # can support
 protected_install can-utils
@@ -475,9 +475,9 @@ rm -rf /usr/share/doc
 # create users and set password
 useradd -m -G audio -s /bin/bash user
 useradd -m -G audio -s /bin/bash x_user
-usermod -a -G video user
-usermod -a -G video x_user
-echo "user:user" | chpasswd
+# usermod -a -G video user
+# usermod -a -G video x_user
+echo "netico:netico" | chpasswd
 echo "root:root" | chpasswd
 passwd -d x_user
 
@@ -491,9 +491,9 @@ EOF
 
 ## fourth-stage ##
 ### install variscite-bluetooth init script
-	install -m 0755 ${G_VARISCITE_PATH}/variscite-bluetooth ${ROOTFS_BASE}/etc/init.d/
-	LANG=C chroot ${ROOTFS_BASE} update-rc.d variscite-bluetooth defaults
-	LANG=C chroot ${ROOTFS_BASE} update-rc.d variscite-bluetooth enable 2 3 4 5
+#	install -m 0755 ${G_VARISCITE_PATH}/variscite-bluetooth ${ROOTFS_BASE}/etc/init.d/
+#	LANG=C chroot ${ROOTFS_BASE} update-rc.d variscite-bluetooth defaults
+#	LANG=C chroot ${ROOTFS_BASE} update-rc.d variscite-bluetooth enable 2 3 4 5
 
 ## end packages stage ##
 [ "${G_USER_PACKAGES}" != "" ] && {
@@ -521,10 +521,10 @@ rm -f user-stage
 	install -m 0644 ${G_VARISCITE_PATH}/issue.net ${ROOTFS_BASE}/etc/
 	install -m 0644 ${G_VARISCITE_PATH}/hostapd.conf ${ROOTFS_BASE}/etc/
 	install -m 0755 ${G_VARISCITE_PATH}/rc.local ${ROOTFS_BASE}/etc/
-	install -m 0644 ${G_VARISCITE_PATH}/splash.bmp ${ROOTFS_BASE}/boot/
+#	install -m 0644 ${G_VARISCITE_PATH}/splash.bmp ${ROOTFS_BASE}/boot/
 
-	install -m 0644 ${G_VARISCITE_PATH}/wallpaper.png \
-		${ROOTFS_BASE}/usr/share/images/desktop-base/default
+#	install -m 0644 ${G_VARISCITE_PATH}/wallpaper.png \
+#		${ROOTFS_BASE}/usr/share/images/desktop-base/default
 
 ## added alsa default configs ##
 	install -m 0644 ${G_VARISCITE_PATH}/asound.state ${ROOTFS_BASE}/var/lib/alsa/
@@ -542,7 +542,7 @@ rm -f user-stage
 	}
 
 ## install wl18xx stuff
-	install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
+#	install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
 
 ## copy imx sources to rootfs for native compilation
 	install_imx_packages
@@ -630,7 +630,7 @@ function make_kernel() {
 
 	pr_info "Copy kernel and dtb files to output dir: ${5}"
 	cp ${4}/arch/arm/boot/uImage ${5}/;
-	cp ${4}/arch/arm/boot/dts/*.dtb ${5}/;
+	cp ${4}/arch/arm/boot/dts/${3} ${5}/;
 
 	return 0;
 }
@@ -840,7 +840,7 @@ function make_sdcard() {
 	readonly local DEBIAN_IMAGES_TO_ROOTFS_POINT="opt/images/Debian"
 
 	readonly local BOOTLOAD_RESERVE=4
-	readonly local BOOT_ROM_SIZE=8
+	readonly local BOOT_ROM_SIZE=16
 	readonly local SPARE_SIZE=0
 
 	[ "${LPARAM_BLOCK_DEVICE}" = "na" ] && {
@@ -952,13 +952,13 @@ n
 p
 1
 8192
-24575
+49150
 t
 c
 n
 p
 2
-24576
+49151
 
 p
 w
