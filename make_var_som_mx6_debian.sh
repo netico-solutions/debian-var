@@ -40,14 +40,17 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 
 ## LINUX kernel: git, config, paths and etc
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
-readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_nanoedge_defconfig'
-readonly G_LINUX_DTB='imx6q-var-som-res.dtb'
+readonly G_LINUX_KERNEL_GIT="https://github.com/varigit/linux-imx.git"
+readonly G_LINUX_KERNEL_BRANCH="imx_4.9.88_2.0.0_ga-var01"
+readonly G_LINUX_KERNEL_REV="ec7d7d8ccb4960ee382c97f3b08db16086382d4b"
+readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_defconfig'
+readonly G_LINUX_DTB='imx6dl-var-som-cap.dtb imx6dl-var-som-res.dtb imx6dl-var-som-solo-cap.dtb imx6dl-var-som-solo-res.dtb imx6dl-var-som-solo-vsc.dtb imx6dl-var-som-vsc.dtb imx6q-var-dart.dtb imx6q-var-som-cap.dtb imx6q-var-som-res.dtb imx6q-var-som-vsc.dtb imx6qp-var-som-cap.dtb imx6qp-var-som-res.dtb imx6qp-var-som-vsc.dtb'
 
 ## uboot
 readonly G_UBOOT_SRC_DIR="${DEF_SRC_DIR}/uboot"
 readonly G_UBOOT_GIT="https://github.com/netico-solutions/uboot-imx.git"
 readonly G_UBOOT_BRANCH="imx_v2017.03_4.9.11_1.0.0_ga_var01"
-readonly G_UBOOT_REV="466898df5360675516bf1f014e5d48e507ae5c95"
+readonly G_UBOOT_REV="a7869c2cde98e5f5b1886d8f54dff321a7aa0597"
 readonly G_UBOOT_DEF_CONFIG_MMC='mx6var_som_sd_config'
 readonly G_UBOOT_DEF_CONFIG_NAND='mx6var_som_nand_config'
 readonly G_UBOOT_NAME_FOR_EMMC='u-boot.img.mmc'
@@ -74,47 +77,47 @@ readonly G_WILINK8_FW_BT_GIT_SRCREV="31a43dc1248a6c19bb886006f8c167e2fd21cb78"
 # much more standard replacement for Freescale's imx-gst1.0-plugin
 # Freescale mirror
 readonly G_FSL_MIRROR="http://www.freescale.com/lgfiles/NMG/MAD/YOCTO"
-#apt-get install gstreamer1.0-x gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa
-# sh firmware-imx-6.0.bin --auto-accept
-readonly G_IMX_FW_PKG="firmware-imx-6.0"
+# apt-get install gstreamer1.0-x gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa
+# sh firmware-imx-7.5.bin --auto-accept
+readonly G_IMX_FW_PKG="firmware-imx-7.5"
 readonly G_IMX_FW_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_FW_PKG}"
 readonly G_IMX_FW_LOCAL_PATH="${DEF_SRC_DIR}/imx/${G_IMX_FW_PKG}.bin"
 readonly G_IMX_FW_REMOTE_LINK="${G_FSL_MIRROR}/${G_IMX_FW_PKG}.bin"
-# sh imx-vpu-5.4.37.bin --auto-accept
-readonly G_IMX_VPU_PKG="imx-vpu-5.4.37"
+# sh imx-vpu-5.4.38.bin --auto-accept
+readonly G_IMX_VPU_PKG="imx-vpu-5.4.38"
 readonly G_IMX_VPU_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_VPU_PKG}"
 readonly G_IMX_VPU_LOCAL_PATH="${DEF_SRC_DIR}/imx/${G_IMX_VPU_PKG}.bin"
 readonly G_IMX_VPU_REMOTE_LINK="${G_FSL_MIRROR}/${G_IMX_VPU_PKG}.bin"
-# sh imx-codec-4.2.1.bin --auto-accept
-readonly G_IMX_CODEC_PKG="imx-codec-4.2.1"
+# sh imx-codec-4.3.5.bin --auto-accept
+readonly G_IMX_CODEC_PKG="imx-codec-4.3.5"
 readonly G_IMX_CODEC_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_CODEC_PKG}"
 readonly G_IMX_CODEC_LOCAL_PATH="${DEF_SRC_DIR}/imx/${G_IMX_CODEC_PKG}.bin"
 readonly G_IMX_CODEC_REMOTE_LINK="${G_FSL_MIRROR}/${G_IMX_CODEC_PKG}.bin"
-# sh imx-gpu-g2d-6.2.2.p0.bin --auto-accept
-readonly G_IMX_GPU_G2D_PKG="imx-gpu-g2d-6.2.2.p0"
+# sh imx-gpu-g2d-6.2.4.p1.2.bin --auto-accept
+readonly G_IMX_GPU_G2D_PKG="imx-gpu-g2d-6.2.4.p1.2"
 readonly G_IMX_GPU_G2D_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_GPU_G2D_PKG}"
 readonly G_IMX_GPU_G2D_LOCAL_PATH="${DEF_SRC_DIR}/imx/${G_IMX_GPU_G2D_PKG}.bin"
 readonly G_IMX_GPU_G2D_REMOTE_LINK="${G_FSL_MIRROR}/${G_IMX_GPU_G2D_PKG}.bin"
-# sh imx-gpu-viv-6.2.2.p0-aarch32.bin --auto-accept
-readonly G_IMX_GPU_VIV_PKG="imx-gpu-viv-6.2.2.p0-aarch32"
+# sh imx-gpu-viv-6.2.4.p1.2-aarch32.bin --auto-accept
+readonly G_IMX_GPU_VIV_PKG="imx-gpu-viv-6.2.4.p1.2-aarch32"
 readonly G_IMX_GPU_VIV_LOCAL_DIR="${DEF_SRC_DIR}/imx/${G_IMX_GPU_VIV_PKG}"
 readonly G_IMX_GPU_VIV_LOCAL_PATH="${DEF_SRC_DIR}/imx/${G_IMX_GPU_VIV_PKG}.bin"
 readonly G_IMX_GPU_VIV_REMOTE_LINK="${G_FSL_MIRROR}/${G_IMX_GPU_VIV_PKG}.bin"
 # i.MX X.org Video Driver for i.MX Graphics 2D acceleration
 readonly G_IMX_XORG_DRV_SRC_DIR="${DEF_SRC_DIR}/imx/xf86-video-imx-vivante"
 readonly G_IMX_XORG_DRV_GIT="https://source.codeaurora.org/external/imx/xf86-video-imx-vivante.git"
-readonly G_IMX_XORG_DRV_GIT_BRANCH="nxp/imx_4.9.11_1.0.0_ga"
-readonly G_IMX_XORG_DRV_GIT_SRCREV="07ef065dfe09f1c05a1a188c371577faa3677a17"
+readonly G_IMX_XORG_DRV_GIT_BRANCH="imx_exa_viv6_g2d"
+readonly G_IMX_XORG_DRV_GIT_SRCREV="946e8603ed9a52f36d305405dbb2ab8ff90943d0"
 # replacement for Freescale's closed-development libfslvapwrapper library
 readonly G_IMX_VPU_API_SRC_DIR="${DEF_SRC_DIR}/imx/libimxvpuapi"
-readonly G_IMX_VPU_API_GIT="git://github.com/Freescale/libimxvpuapi.git"
+readonly G_IMX_VPU_API_GIT="https://github.com/Freescale/libimxvpuapi.git"
 readonly G_IMX_VPU_API_GIT_BRANCH="master"
 readonly G_IMX_VPU_API_GIT_SRCREV="4afb52f97e28c731c903a8538bf99e4a6d155b42"
 # much more standard replacement for Freescale's imx-gst1.0-plugin
 readonly G_IMX_GSTREAMER_SRC_DIR="${DEF_SRC_DIR}/imx/gstreamer-imx"
-readonly G_IMX_GSTREAMER_GIT="git://github.com/Freescale/gstreamer-imx.git"
+readonly G_IMX_GSTREAMER_GIT="https://github.com/Freescale/gstreamer-imx.git"
 readonly G_IMX_GSTREAMER_GIT_BRANCH="master"
-readonly G_IMX_GSTREAMER_GIT_SRCREV="ecd884a7199938301307123dc92d5c3cc9b1becb"
+readonly G_IMX_GSTREAMER_GIT_SRCREV="889b8352ca09cd224be6a2f8d53efd59a38fa9cb"
 
 ## CROSS_COMPILER config and paths
 readonly G_CROSS_COMPILER_NAME="gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf"
@@ -250,7 +253,6 @@ function pr_debug() {
 	echo "D: $1"
 }
 
-
 ### work functions ###
 
 # get sources from git repository
@@ -275,6 +277,22 @@ function get_remote_file() {
 	# download remote file
 	wget -c ${1} -O ${2}
 	return $?
+}
+
+function make_prepare() {
+## create src dirs
+	mkdir -p ${DEF_SRC_DIR}/imx && :;
+	mkdir -p ${DEF_SRC_DIR}/wilink8 && :;
+	mkdir -p ${G_TOOLS_PATH} && :;
+
+## create rootfs dir
+	mkdir -p ${G_ROOTFS_DIR} && :;
+
+## create out dir
+	mkdir -p ${PARAM_OUTPUT_DIR} && :;
+
+## create tmp dir
+	mkdir -p ${G_TMP_DIR} && :;
 }
 
 # unpack fsl package
@@ -322,7 +340,15 @@ function make_debian_rootfs() {
 ## added mirror to source list
 echo "deb ${DEF_DEBIAN_MIRROR} ${DEB_RELEASE} main contrib non-free
 deb-src ${DEF_DEBIAN_MIRROR} ${DEB_RELEASE} main contrib non-free
+deb ${DEF_DEBIAN_MIRROR} ${DEB_RELEASE}-backports main contrib non-free
+deb-src ${DEF_DEBIAN_MIRROR} ${DEB_RELEASE}-backports main contrib non-free
 " > etc/apt/sources.list
+
+## raise backports priority
+echo "Package: *
+Pin: release n=${DEB_RELEASE}-backports
+Pin-Priority: 500
+" > etc/apt/preferences.d/backports
 
 echo "
 # /dev/mmcblk0p1  /boot           vfat    defaults        0       0
@@ -414,7 +440,9 @@ sed -i -e 's/#PermitRootLogin.*/PermitRootLogin\tyes/g' /etc/ssh/sshd_config
 #protected_install xfce4-volumed
 
 # network manager
-# protected_install network-manager-gnome
+protected_install network-manager-gnome
+
+# net-tools (ifconfig, etc.)
 protected_install net-tools
 
 ## fix lightdm config (added autologin x_user) ##
@@ -526,6 +554,10 @@ rm -f user-stage
 #	install -m 0644 ${G_VARISCITE_PATH}/wallpaper.png \
 #		${ROOTFS_BASE}/usr/share/images/desktop-base/default
 
+## disable light-locker
+	install -m 0755 ${G_VARISCITE_PATH}/disable-lightlocker ${ROOTFS_BASE}/usr/local/bin/
+	install -m 0644 ${G_VARISCITE_PATH}/disable-lightlocker.desktop ${ROOTFS_BASE}/etc/xdg/autostart/
+
 ## added alsa default configs ##
 	install -m 0644 ${G_VARISCITE_PATH}/asound.state ${ROOTFS_BASE}/var/lib/alsa/
 	install -m 0644 ${G_VARISCITE_PATH}/asound.conf ${ROOTFS_BASE}/etc/
@@ -533,19 +565,11 @@ rm -f user-stage
 ## Revert regular booting
 	rm -f ${ROOTFS_BASE}/usr/sbin/policy-rc.d
 
-	cp ${G_VARISCITE_PATH}/chroot_script* ${ROOTFS_BASE}
-
 ## install kernel modules in rootfs
 	install_kernel_modules ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX} ${G_LINUX_KERNEL_DEF_CONFIG} ${G_LINUX_KERNEL_SRC_DIR} ${ROOTFS_BASE} || {
 		pr_error "Failed #$? in function install_kernel_modules"
 		return 2;
 	}
-
-## install wl18xx stuff
-#	install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
-
-## copy imx sources to rootfs for native compilation
-	install_imx_packages
 
 ## copy custom files
 	cp ${G_VARISCITE_PATH}/kobs-ng ${ROOTFS_BASE}/usr/bin
@@ -554,12 +578,31 @@ rm -f user-stage
 	ln -sf fw_printenv ${ROOTFS_BASE}/usr/bin/fw_setenv
 	cp ${G_VARISCITE_PATH}/10-imx.rules ${ROOTFS_BASE}/etc/udev/rules.d
 
+	cp ${G_VARISCITE_PATH}/chroot_script* ${ROOTFS_BASE}
+
+## install wl18xx stuff
+	install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
+
+## copy imx sources to rootfs for native compilation
+	install_imx_packages
+
 	LANG=C LC_ALL=C chroot ${ROOTFS_BASE} /chroot_script_base.sh
 	sleep 1; sync
 
-## apply drm-update-arm.patch
-	LANG=C LC_ALL=C chroot ${ROOTFS_BASE} /chroot_script_patched-drm-prebuilt.sh
+## install xorg libs
+	LANG=C LC_ALL=C chroot ${ROOTFS_BASE} /chroot_script_patched-xorg-server.sh
 	sleep 1; sync
+
+## install iMX GPU libs
+	LANG=C LC_ALL=C chroot ${ROOTFS_BASE} /chroot_script_imx-gpu.sh
+	sleep 1; sync
+
+### install vivante init scripts
+	cp ${G_VARISCITE_PATH}/xorg.conf ${ROOTFS_BASE}/usr/share/X11/xorg.conf.d/90-vivante.conf
+	install -m 0755 ${G_VARISCITE_PATH}/vivante ${ROOTFS_BASE}/etc/init.d/
+	LANG=C chroot ${ROOTFS_BASE} update-rc.d vivante defaults
+	install -m 0755 ${G_VARISCITE_PATH}/rc.autohdmi ${ROOTFS_BASE}/etc/init.d
+	LANG=C chroot ${ROOTFS_BASE} update-rc.d rc.autohdmi defaults
 
 ## install iMX VPU libs
 	LANG=C LC_ALL=C chroot ${ROOTFS_BASE} /chroot_script_gst.sh
@@ -587,7 +630,7 @@ rm -f cleanup
 	rm ${ROOTFS_BASE}/chroot_script*
 	rm -rf ${ROOTFS_BASE}/usr/local/src/*
 
-	return 0
+	return 0;
 }
 
 # make tarbar arx from footfs
@@ -596,6 +639,7 @@ rm -f cleanup
 function make_tarbar() {
 	cd $1
 
+	chown root:root .
 	pr_info "make tarbar arx from folder ${1}"
 	pr_info "Remove old arx $2"
 	rm $2 > /dev/null 2>&1 && :;
@@ -718,6 +762,9 @@ function install_imx_packages() {
 
 	cp -dr ${G_IMX_VPU_LOCAL_DIR} ${IMX_DIR}
 	cp -dr ${G_IMX_CODEC_LOCAL_DIR} ${IMX_DIR}
+	cp -dr ${G_IMX_GPU_G2D_LOCAL_DIR} ${IMX_DIR}
+	cp -dr ${G_IMX_GPU_VIV_LOCAL_DIR} ${IMX_DIR}
+	cp -dr ${G_IMX_XORG_DRV_SRC_DIR} ${IMX_DIR}
 	cp -dr ${G_IMX_VPU_API_SRC_DIR} ${IMX_DIR}
 	cp -dr ${G_IMX_GSTREAMER_SRC_DIR} ${IMX_DIR}
 
@@ -813,7 +860,7 @@ function check_sdcard()
 	# Check that device is either removable or loop
 	if [ "$removable" != "1" -a $(stat -c '%t' /dev/$dev) != ${LOOP_MAJOR} ]; then
 		pr_error "$1 is not a removable device, exiting"
-		#return 1
+		return 1
 	fi
 
 	# Check that device is attached
@@ -864,10 +911,6 @@ function make_sdcard() {
 			umount ${LPARAM_BLOCK_DEVICE}${part}$i
 		fi
 	done
-
-	# Call sfdisk to get total card size
-	local TOTAL_SIZE=`sfdisk -s ${LPARAM_BLOCK_DEVICE}`
-	local TOTAL_SIZE=`expr ${TOTAL_SIZE} / 1024`
 
 	function format_sdcard
 	{
@@ -1010,12 +1053,7 @@ EOF
 #################### commands ################
 
 function cmd_make_deploy() {
-	mkdir -p ${DEF_SRC_DIR}/imx
-	mkdir -p ${DEF_SRC_DIR}/wilink8
-	mkdir -p ${G_TOOLS_PATH}
-	mkdir -p ${G_ROOTFS_DIR}
-	mkdir -p ${G_TMP_DIR}
-	mkdir -p ${PARAM_OUTPUT_DIR}
+	make_prepare;
 
 	# get linaro toolchain
 	(( `ls ${G_CROSS_COMPILER_PATH} 2>/dev/null | wc -l` == 0 )) && {
@@ -1096,6 +1134,9 @@ function cmd_make_deploy() {
 	(( `ls ${G_IMX_XORG_DRV_SRC_DIR} 2>/dev/null | wc -l` == 0 )) && {
 		pr_info "Get XORG driver repository";
 		get_git_src ${G_IMX_XORG_DRV_GIT} ${G_IMX_XORG_DRV_GIT_BRANCH} ${G_IMX_XORG_DRV_SRC_DIR} ${G_IMX_XORG_DRV_GIT_SRCREV}
+		cd ${G_IMX_XORG_DRV_SRC_DIR}
+		patch -p1 < ${DEF_BUILDENV}/patches/imx/xf86-video-imx-vivante/makefile.patch
+		cd -
 	};
 
 	# get imx vpu api repository
@@ -1114,6 +1155,8 @@ function cmd_make_deploy() {
 }
 
 function cmd_make_rootfs() {
+	make_prepare;
+
 	## make debian rootfs
 	cd ${G_ROOTFS_DIR}
 	make_debian_rootfs ${G_ROOTFS_DIR} || {
@@ -1150,8 +1193,14 @@ function cmd_make_kernel() {
 	return 0;
 }
 
-
 function cmd_make_kmodules() {
+	make_prepare;
+
+	rm -rf ${G_ROOTFS_DIR}/lib/modules/* || {
+		pr_error "Failed #$? prepare modules dir"
+		return 1;
+	};
+
 	make_kernel_modules ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX} ${G_LINUX_KERNEL_DEF_CONFIG} ${G_LINUX_KERNEL_SRC_DIR} ${G_ROOTFS_DIR} || {
 		pr_error "Failed #$? in function make_kernel_modules"
 		return 2;
