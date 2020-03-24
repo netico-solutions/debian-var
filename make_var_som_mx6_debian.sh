@@ -41,9 +41,9 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 ## LINUX kernel: git, config, paths and etc
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
 readonly G_LINUX_KERNEL_GIT="https://github.com/netico-solutions/linux-imx.git"
-readonly G_LINUX_KERNEL_BRANCH="imx_4.9.88_2.0.0_ga-var01"
+readonly G_LINUX_KERNEL_BRANCH="imx_4.9.11_1.0.0_ga-var01"
 readonly G_LINUX_KERNEL_REV="ec7d7d8ccb4960ee382c97f3b08db16086382d4b"
-readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_var_nanoedge_defconfig'
+readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_new_sound_rec_defconfig'
 readonly G_LINUX_DTB='imx6q-var-som-res.dtb'
 
 ## uboot
@@ -354,10 +354,13 @@ echo "
 # /dev/mmcblk0p1  /boot           vfat    defaults        0       0
 " > etc/fstab
 
-echo "nano-edge" > etc/hostname
+echo "sound-rec" > etc/hostname
 
 echo "auto lo
 iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
 
 auto eth1
 iface eth1 inet dhcp
@@ -426,10 +429,10 @@ protected_install dosfstools
 # fix config for sshd (permit root login)
 sed -i -e 's/#PermitRootLogin.*/PermitRootLogin\tyes/g' /etc/ssh/sshd_config
 
-# enable graphical desktop
-# protected_install xorg
-# protected_install xfce4
-# protected_install xfce4-goodies
+#enable graphical desktop
+protected_install xorg
+protected_install xfce4
+protected_install xfce4-goodies
 
 # sound mixer & volume
 # xfce-mixer is not part of Stretch since the stable versionit depends on
@@ -446,8 +449,8 @@ protected_install network-manager-gnome
 protected_install net-tools
 
 ## fix lightdm config (added autologin x_user) ##
-# sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
-# sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
+sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
+sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
 
 # added alsa & alsa utilites
 protected_install alsa-utils
@@ -463,8 +466,8 @@ protected_install usbutils
 protected_install iperf
 
 #media
-#protected_install audacious
-# protected_install parole
+protected_install audacious
+#protected_install parole
 
 # mtd
 protected_install mtd-utils
@@ -503,9 +506,9 @@ rm -rf /usr/share/doc
 # create users and set password
 useradd -m -G audio -s /bin/bash user
 useradd -m -G audio -s /bin/bash x_user
-# usermod -a -G video user
-# usermod -a -G video x_user
-echo "netico:netico" | chpasswd
+usermod -a -G video user
+usermod -a -G video x_user
+echo "user:user" | chpasswd
 echo "root:root" | chpasswd
 passwd -d x_user
 
@@ -558,8 +561,8 @@ rm -f user-stage
 	install -m 0755 ${G_VARISCITE_PATH}/disable-lightlocker ${ROOTFS_BASE}/usr/local/bin/
 	install -m 0644 ${G_VARISCITE_PATH}/disable-lightlocker.desktop ${ROOTFS_BASE}/etc/xdg/autostart/
 
-## added alsa default configs ##
-	install -m 0644 ${G_VARISCITE_PATH}/asound.state ${ROOTFS_BASE}/var/lib/alsa/
+## added alsa default configs - modified for ak5386 ##
+	#install -m 0644 ${G_VARISCITE_PATH}/asound.state ${ROOTFS_BASE}/var/lib/alsa/
 	install -m 0644 ${G_VARISCITE_PATH}/asound.conf ${ROOTFS_BASE}/etc/
 
 ## Revert regular booting
@@ -581,7 +584,7 @@ rm -f user-stage
 	cp ${G_VARISCITE_PATH}/chroot_script* ${ROOTFS_BASE}
 
 ## install wl18xx stuff
-	install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
+	#install_wl18xx_packages ${G_CROSS_COMPILER_PATH}/${G_CROSS_COMPILER_PREFIX}
 
 ## copy imx sources to rootfs for native compilation
 	install_imx_packages
