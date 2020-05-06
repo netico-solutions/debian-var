@@ -326,7 +326,7 @@ deb-src ${DEF_DEBIAN_MIRROR} ${DEB_RELEASE} main contrib non-free
 " > etc/apt/sources.list
 
 echo "
-# /dev/mmcblk0p1  /boot           vfat    defaults        0       0
+tmpfs   /mnt/audio-fifo     tmpfs       defaults,size=10M        0 0
 " > etc/fstab
 
 echo "sound-rec" > etc/hostname
@@ -335,16 +335,8 @@ echo "auto lo
 iface lo inet loopback
 
 auto eth0
-iface eth0 inet static
-address 192.168.0.50
-netmask 255.255.255.0
-gateway 192.168.0.1
+iface eth0 inet dhcp
 
-auto eth1
-iface eth1 inet static
-address 192.168.0.60
-netmask 255.255.255.0
-gateway 192.168.0.1
 " > etc/network/interfaces
 
 echo "
@@ -401,6 +393,8 @@ apt-get update || apt-get update
 
 protected_install locales
 protected_install ntp
+protected_install git
+protected_install vim
 protected_install openssh-server
 protected_install nfs-common
 
