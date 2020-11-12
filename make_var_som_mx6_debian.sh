@@ -42,7 +42,7 @@ readonly G_VARISCITE_PATH="${DEF_BUILDENV}/variscite"
 readonly G_LINUX_KERNEL_SRC_DIR="${DEF_SRC_DIR}/kernel"
 readonly G_LINUX_KERNEL_GIT="https://github.com/netico-solutions/linux-imx.git"
 readonly G_LINUX_KERNEL_BRANCH="imx_4.9.11_1.0.0_ga-var01"
-readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_new_sound_rec_defconfig'
+readonly G_LINUX_KERNEL_DEF_CONFIG='imx_v7_nano_edge_defconfig'
 readonly G_LINUX_DTB='imx6q-var-som-res.dtb'
 
 ## uboot
