@@ -126,7 +126,7 @@ readonly G_CROSS_COMPILER_JOPTION="-j 4"
 readonly G_EXT_CROSS_COMPILER_LINK="http://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/arm-linux-gnueabihf/${G_CROSS_COMPILER_ARCHIVE}"
 
 ############## user rootfs packages ##########
-readonly G_USER_PACKAGES=""
+readonly G_USER_PACKAGES="htop"
 
 #### Input params #####
 PARAM_DEB_LOCAL_MIRROR="${DEF_DEBIAN_MIRROR}"
@@ -338,6 +338,30 @@ auto eth0
 iface eth0 inet dhcp
 
 " > etc/network/interfaces
+
+cat > .bashrc << EOF
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# Note: PS1 and umask are already set in /etc/profile. You should not
+# need this unless you want different defaults for root.
+# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+# umask 022
+
+# You may uncomment the following lines if you want 'ls' to be colorized:
+export LS_OPTIONS='--color=auto'
+# eval "\`dircolors\`"
+alias ls='ls \$LS_OPTIONS'
+# alias ll='ls \$LS_OPTIONS -l'
+# alias l='ls \$LS_OPTIONS -lA'
+alias la='ls -la'
+alias grep='grep --color=auto'
+#
+# Some more alias to avoid making mistakes:
+# alias rm='rm -i'
+# alias cp='cp -i'
+# alias mv='mv -i'
+EOF
+cp .bashrc ${ROOTFS_BASE}/root/.bashrc
 
 echo "
 locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
