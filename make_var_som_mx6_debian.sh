@@ -126,7 +126,7 @@ readonly G_CROSS_COMPILER_JOPTION="-j 4"
 readonly G_EXT_CROSS_COMPILER_LINK="http://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/arm-linux-gnueabihf/${G_CROSS_COMPILER_ARCHIVE}"
 
 ############## user rootfs packages ##########
-readonly G_USER_PACKAGES="htop"
+readonly G_USER_PACKAGES="htop tig python3-pip portaudio19-dev python-pyaudio python3-pyaudio"
 
 #### Input params #####
 PARAM_DEB_LOCAL_MIRROR="${DEF_DEBIAN_MIRROR}"
@@ -535,6 +535,25 @@ apt-get update
 
 # install all user packages
 apt-get -y install ${G_USER_PACKAGES}
+
+# Install necessary Python modules
+pip3 install Cython==0.29.21
+pip3 install beautifultable==1.0.0
+pip3 install cryptography==1.7.1
+pip3 install idna==2.2
+pip3 install keyring==10.1
+pip3 install keyrings.alt==1.3
+pip3 install numpy==1.18.5
+pip3 install onboard==1.3.0
+pip3 install pyasn1==0.1.9
+pip3 install PyAudio==0.2.11
+pip3 install pycrypto==2.6.1
+pip3 install pygobject==3.22.0
+pip3 install pyxdg==0.25
+pip3 install SecretStorage==2.3.1
+pip3 install six==1.10.0
+pip3 install termcolor==1.1.0
+pip3 install wcwidth==0.2.5
 
 rm -f user-stage
 " > user-stage
