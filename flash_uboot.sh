@@ -2,7 +2,7 @@ readonly G_UBOOT_NAME_FOR_EMMC='u-boot.img.mmc'
 readonly G_SPL_NAME_FOR_EMMC='SPL.mmc'
 
 readonly local LPARAM_BLOCK_DEVICE=$1
-readonly local LPARAM_OUTPUT_DIR="/home/lazar/workspace/nano-edge/debian-var/output"
+readonly local LPARAM_OUTPUT_DIR="/data/workspace/debian-var/output"
 # pr_info "Flashing U-Boot"
 echo "Flashing U-Boot"
 dd if=${LPARAM_OUTPUT_DIR}/${G_SPL_NAME_FOR_EMMC} of=${LPARAM_BLOCK_DEVICE} bs=1K seek=1; sync
