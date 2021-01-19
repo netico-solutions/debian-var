@@ -126,7 +126,7 @@ readonly G_CROSS_COMPILER_JOPTION="-j 4"
 readonly G_EXT_CROSS_COMPILER_LINK="http://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/arm-linux-gnueabihf/${G_CROSS_COMPILER_ARCHIVE}"
 
 ############## user rootfs packages ##########
-readonly G_USER_PACKAGES=""
+readonly G_USER_PACKAGES="htop tig python3-pip portaudio19-dev python-pyaudio python3-pyaudio stress"
 
 #### Input params #####
 PARAM_DEB_LOCAL_MIRROR="${DEF_DEBIAN_MIRROR}"
@@ -339,6 +339,595 @@ iface eth0 inet dhcp
 
 " > etc/network/interfaces
 
+cat > .bashrc << EOF
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# Note: PS1 and umask are already set in /etc/profile. You should not
+# need this unless you want different defaults for root.
+# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+# umask 022
+
+# You may uncomment the following lines if you want 'ls' to be colorized:
+export LS_OPTIONS='--color=auto'
+# eval "\`dircolors\`"
+alias ls='ls \$LS_OPTIONS'
+# alias ll='ls \$LS_OPTIONS -l'
+# alias l='ls \$LS_OPTIONS -lA'
+alias la='ls -la'
+alias grep='grep --color=auto'
+#
+# Some more alias to avoid making mistakes:
+# alias rm='rm -i'
+# alias cp='cp -i'
+# alias mv='mv -i'
+EOF
+cp .bashrc ${ROOTFS_BASE}/root/.bashrc
+
+cat > alsa.conf << EOF
+#
+#  ALSA library configuration file
+#
+
+# pre-load the configuration files
+
+@hooks [
+	{
+		func load
+		files [
+			{
+				@func concat
+				strings [
+					{ @func datadir }
+					"/alsa.conf.d/"
+				]
+			}
+			"/etc/asound.conf"
+			#"~/.asoundrc"
+		]
+		errors false
+	}
+]
+
+# load card-specific configuration files (on request)
+
+cards.@hooks [
+	{
+		func load
+		files [
+			{
+				@func concat
+				strings [
+					{ @func datadir }
+					"/cards/aliases.conf"
+				]
+			}
+		]
+	}
+	{
+		func load_for_all_cards
+		files [
+			{
+				@func concat
+				strings [
+					{ @func datadir }
+					"/cards/"
+					{ @func private_string }
+					".conf"
+				]
+			}
+		]
+		errors false
+	}
+]
+
+#
+# defaults
+#
+
+# show all name hints also for definitions without hint {} section
+defaults.namehint.showall off
+# show just basic name hints
+defaults.namehint.basic off
+# show extended name hints
+defaults.namehint.extended off
+#
+defaults.ctl.card 0
+defaults.pcm.card 0
+defaults.pcm.subdevice -1
+
+#
+#  PCM interface
+#
+
+# redirect to load-on-demand extended pcm definitions
+pcm.hw {
+	@args [ CARD DEV SUBDEV ]
+	@args.CARD {
+		type string
+		default {
+			@func getenv
+			vars [
+				ALSA_PCM_CARD
+				ALSA_CARD
+			]
+			default {
+				@func refer
+				name defaults.pcm.card
+			}
+		}
+	}
+	@args.DEV {
+		type integer
+		default {
+			@func igetenv
+			vars [
+				ALSA_PCM_DEVICE
+			]
+			default {
+				@func refer
+				name defaults.pcm.device
+			}
+		}
+	}
+	@args.SUBDEV {
+		type integer
+		default {
+			@func refer
+			name defaults.pcm.subdevice
+		}
+	}		
+	type hw
+	card $CARD
+	device $DEV
+	subdevice $SUBDEV
+	hint {
+		show {
+			@func refer
+			name defaults.namehint.extended
+		}
+		description "Direct hardware device without any conversions"
+	}
+}
+
+pcm.plughw {
+	@args [ CARD DEV SUBDEV ]
+	@args.CARD {
+		type string
+		default {
+			@func getenv
+			vars [
+				ALSA_PCM_CARD
+				ALSA_CARD
+			]
+			default {
+				@func refer
+				name defaults.pcm.card
+			}
+		}
+	}
+	@args.DEV {
+		type integer
+		default {
+			@func igetenv
+			vars [
+				ALSA_PCM_DEVICE
+			]
+			default {
+				@func refer
+				name defaults.pcm.device
+			}
+		}
+	}
+	@args.SUBDEV {
+		type integer
+		default {
+			@func refer
+			name defaults.pcm.subdevice
+		}
+	}		
+	type plug
+	slave.pcm {
+		type hw
+		card $CARD
+		device $DEV
+		subdevice $SUBDEV
+	}
+	hint {
+		show {
+			@func refer
+			name defaults.namehint.extended
+		}
+		description "Hardware device with all software conversions"
+	}
+}
+
+pcm.plug {
+	@args [ SLAVE ]
+	@args.SLAVE {
+		type string
+	}
+	type plug
+	slave.pcm $SLAVE
+}
+
+pcm.shm {
+	@args [ SOCKET PCM ]
+	@args.SOCKET {
+		type string
+	}
+	@args.PCM {
+		type string
+	}
+	type shm
+	server $SOCKET
+	pcm $PCM
+}
+
+pcm.tee {
+	@args [ SLAVE FILE FORMAT ]
+	@args.SLAVE {
+		type string
+	}
+	@args.FILE {
+		type string
+	}
+	@args.FORMAT {
+		type string
+		default {
+			@func refer
+			name defaults.pcm.file_format
+		}
+	}
+	type file
+	slave.pcm $SLAVE
+	file $FILE
+	format $FORMAT
+	truncate {
+		@func refer
+		name defaults.pcm.file_truncate
+	}
+}
+
+pcm.file {
+	@args [ FILE FORMAT ]
+	@args.FILE {
+		type string
+	}
+	@args.FORMAT {
+		type string
+		default {
+			@func refer
+			name defaults.pcm.file_format
+		}
+	}
+	type file
+	slave.pcm null
+	file $FILE
+	format $FORMAT
+	truncate {
+		@func refer
+		name defaults.pcm.file_truncate
+	}
+}
+
+pcm.null {
+	type null
+	hint {
+		show {
+			@func refer
+			name defaults.namehint.basic
+		}
+		description "Discard all samples (playback) or generate zero samples (capture)"
+	}
+}
+
+#
+#  Control interface
+#
+	
+ctl.sysdefault {
+	type hw
+	card {
+		@func getenv
+		vars [
+			ALSA_CTL_CARD
+			ALSA_CARD
+		]
+		default {
+			@func refer
+			name defaults.ctl.card
+		}
+	}
+	hint.description "Default control device"
+}
+ctl.default ctl.sysdefault
+
+ctl.hw {
+	@args [ CARD ]
+	@args.CARD {
+		type string
+		default {
+			@func getenv
+			vars [
+				ALSA_CTL_CARD
+				ALSA_CARD
+			]
+			default {
+				@func refer
+				name defaults.ctl.card
+			}
+		}
+	}
+	type hw
+	card $CARD
+	hint.description "Direct control device"
+}
+
+ctl.shm {
+	@args [ SOCKET CTL ]
+	@args.SOCKET {
+		type string
+	}
+	@args.CTL {
+		type string
+	}
+	type shm
+	server $SOCKET
+	ctl $CTL
+}
+
+#
+#  RawMidi interface
+#
+
+rawmidi.default {
+	type hw
+	card {
+		@func getenv
+		vars [
+			ALSA_RAWMIDI_CARD
+			ALSA_CARD
+		]
+		default {
+			@func refer
+			name defaults.rawmidi.card
+		}
+	}
+	device {
+		@func igetenv
+		vars [
+			ALSA_RAWMIDI_DEVICE
+		]
+		default {
+			@func refer
+			name defaults.rawmidi.device
+		}
+	}
+	hint.description "Default raw MIDI device"
+}
+
+rawmidi.hw {
+	@args [ CARD DEV SUBDEV ]
+	@args.CARD {
+		type string
+		default {
+			@func getenv
+			vars [
+				ALSA_RAWMIDI_CARD
+				ALSA_CARD
+			]
+			default {
+				@func refer
+				name defaults.rawmidi.card
+			}
+		}
+	}
+	@args.DEV {
+		type integer
+		default {
+			@func igetenv
+			vars [
+				ALSA_RAWMIDI_DEVICE
+			]
+			default {
+				@func refer
+				name defaults.rawmidi.device
+			}
+		}
+	}
+	@args.SUBDEV {
+		type integer
+		default -1
+	}
+	type hw
+	card $CARD
+	device $DEV
+	subdevice $SUBDEV
+	hint {
+		description "Direct rawmidi driver device"
+		device $DEV
+	}
+}
+
+rawmidi.virtual {
+	@args [ MERGE ]
+	@args.MERGE {
+		type string
+		default 1
+	}
+	type virtual
+	merge $MERGE
+}
+
+#
+#  Sequencer interface
+#
+
+seq.default {
+	type hw
+	hint.description "Default sequencer device"
+}
+
+seq.hw {
+	type hw
+}
+
+#
+#  HwDep interface
+#
+
+hwdep.default {
+	type hw
+	card {
+		@func getenv
+		vars [
+			ALSA_HWDEP_CARD
+			ALSA_CARD
+		]
+		default {
+			@func refer
+			name defaults.hwdep.card
+		}
+	}
+	device {
+		@func igetenv
+		vars [
+			ALSA_HWDEP_DEVICE
+		]
+		default {
+			@func refer
+			name defaults.hwdep.device
+		}
+	}
+	hint.description "Default hardware dependent device"
+}
+
+hwdep.hw {
+	@args [ CARD DEV ]
+	@args.CARD {
+		type string
+		default {
+			@func getenv
+			vars [
+				ALSA_HWDEP_CARD
+				ALSA_CARD
+			]
+			default {
+				@func refer
+				name defaults.hwdep.card
+			}
+		}
+	}
+	@args.DEV {
+		type integer
+		default {
+			@func igetenv
+			vars [
+				ALSA_HWDEP_DEVICE
+			]
+			default {
+				@func refer
+				name defaults.hwdep.device
+			}
+		}
+	}
+	type hw
+	card $CARD
+	device $DEV
+	hint {
+		description "Direct hardware dependent device"
+		device $DEV
+	}
+}
+
+#
+#  Timer interface
+#
+
+timer_query.default {
+	type hw
+}
+
+timer_query.hw {
+	type hw
+}
+
+timer.default {
+	type hw
+	class {
+		@func refer
+		name defaults.timer.class
+	}
+	sclass {
+		@func refer
+		name defaults.timer.sclass
+	}
+	card {
+		@func refer
+		name defaults.timer.card
+	}
+	device {
+		@func refer
+		name defaults.timer.device
+	}
+	subdevice {
+		@func refer
+		name defaults.timer.subdevice
+	}
+	hint.description "Default timer device"
+}
+
+timer.hw {
+	@args [ CLASS SCLASS CARD DEV SUBDEV ]
+	@args.CLASS {
+		type integer
+		default {
+			@func refer
+			name defaults.timer.class
+		}
+	}
+	@args.SCLASS {
+		type integer
+		default {
+			@func refer
+			name defaults.timer.sclass
+		}
+	}
+	@args.CARD {
+		type string
+		default {
+			@func refer
+			name defaults.timer.card
+		}
+	}
+	@args.DEV {
+		type integer
+		default {
+			@func refer
+			name defaults.timer.device
+		}
+	}
+	@args.SUBDEV {
+		type integer
+		default {
+			@func refer
+			name defaults.timer.subdevice
+		}
+	}
+	type hw
+	class $CLASS
+	sclass $SCLASS
+	card $CARD
+	device $DEV
+	subdevice $SUBDEV
+	hint {
+		description "Direct timer device"
+		device $DEV
+	}
+}
+EOF
+cp alsa.conf ${ROOTFS_BASE}/usr/share/alsa/alsa.conf
+
 echo "
 locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
 locales locales/default_environment_locale select en_US.UTF-8
@@ -511,6 +1100,26 @@ apt-get update
 
 # install all user packages
 apt-get -y install ${G_USER_PACKAGES}
+
+# Install necessary Python modules
+pip3 install Cython==0.29.21
+pip3 install beautifultable==1.0.0
+pip3 install cryptography==1.7.1
+pip3 install idna==2.2
+pip3 install keyring==10.1
+pip3 install keyrings.alt==1.3
+pip3 install numpy==1.18.5
+pip3 install onboard==1.3.0
+pip3 install pyasn1==0.1.9
+pip3 install PyAudio==0.2.11
+pip3 install pycrypto==2.6.1
+pip3 install pygobject==3.22.0
+pip3 install pyxdg==0.25
+pip3 install SecretStorage==2.3.1
+pip3 install six==1.10.0
+pip3 install termcolor==1.1.0
+pip3 install wcwidth==0.2.5
+pip3 install pyalsaaudio
 
 rm -f user-stage
 " > user-stage
