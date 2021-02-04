@@ -2,7 +2,7 @@ readonly G_UBOOT_NAME_FOR_EMMC='u-boot.img.mmc'
 readonly G_SPL_NAME_FOR_EMMC='SPL.mmc'
 
 # Get the absolute location of this file
-readonly local SCRIPT_PATH="dirname $(readlink -e $0)"
+readonly local SCRIPT_PATH="/data/workspace/debian-var"
 
 # Set the output directory of the build script. This directory needs to match the value set over there.
 readonly local LPARAM_OUTPUT_DIR="${SCRIPT_PATH}/output"
