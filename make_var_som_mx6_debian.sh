@@ -395,6 +395,9 @@ protected_install locales
 protected_install ntp
 protected_install git
 protected_install vim
+protected_install python3-pip
+protected_install htop
+protected_install cpuset
 protected_install openssh-server
 protected_install nfs-common
 
@@ -422,8 +425,8 @@ protected_install network-manager-gnome
 protected_install net-tools
 
 ## fix lightdm config (added autologin x_user) ##
-sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
-sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
+# sed -i -e 's/\#autologin-user=/autologin-user=x_user/g' /etc/lightdm/lightdm.conf
+# sed -i -e 's/\#autologin-user-timeout=0/autologin-user-timeout=0/g' /etc/lightdm/lightdm.conf
 
 # added alsa & alsa utilites
 protected_install alsa-utils
@@ -439,7 +442,7 @@ protected_install usbutils
 protected_install iperf
 
 #media
-protected_install audacious
+# protected_install audacious
 # protected_install parole
 
 # mtd
@@ -463,8 +466,13 @@ protected_install can-utils
 apt-get -y remove xserver-xorg-video-ati
 apt-get -y remove xserver-xorg-video-radeon
 apt-get -y remove hddtemp
+apt-get -y remove network-manager-gnome
+apt-get -y remove modemmanager
 
 apt-get -y autoremove
+
+# Unlink lightdm service
+systemctl disable lightdm
 
 # Remove foreign man pages and locales
 rm -rf /usr/share/man/??
